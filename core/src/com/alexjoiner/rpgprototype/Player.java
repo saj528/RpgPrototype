@@ -74,5 +74,7 @@ public class Player {
         }
     }
 
-
+    public Rectangle getPlayerBoundingBox() {
+        return playerBoundingBox;
+    }
 }
