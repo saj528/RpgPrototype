@@ -52,12 +52,11 @@ public class Player {
     public void detectInput(float delta) {
 
         float speed = 48f;
-
         for (RectangleMapObject rectangleObject : mapObjects.getByType(RectangleMapObject.class)) {
             Rectangle rectangle = rectangleObject.getRectangle();
             if (Intersector.overlaps(rectangle, playerBoundingBox)) {
                 if (direction.equals("up")) {
-                    playerBoundingBox.y -= (speed + 2) * delta;
+                    playerBoundingBox.y -= speed * delta;
                 } else if (direction.equals("down")) {
                     playerBoundingBox.y += speed * delta;
                 } else if (direction.equals("left")) {
@@ -65,7 +64,6 @@ public class Player {
                 } else if (direction.equals("right")) {
                     playerBoundingBox.x -= speed * delta;
                 }
-                return;
             }
         }
 
