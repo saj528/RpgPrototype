@@ -5,6 +5,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Player {
@@ -20,13 +23,17 @@ public class Player {
 
     private String direction;
 
+    private MapObjects mapObjects;
 
 
-    public Player(SpriteBatch batch, SpriteProcessor spriteProcessor) {
+
+    public Player(SpriteBatch batch, SpriteProcessor spriteProcessor, MapObjects mapObjects) {
 
         this.batch = batch;
 
         this.spriteProcessor = spriteProcessor;
+
+        this.mapObjects = mapObjects;
 
         playerBoundingBox = new Rectangle(2, 2, 16, 16);
 
@@ -43,35 +50,55 @@ public class Player {
     }
 
     public void detectInput(float delta) {
+
         float speed = 48f;
+
+        for (RectangleMapObject rectangleObject : mapObjects.getByType(RectangleMapObject.class)) {
+            Rectangle rectangle = rectangleObject.getRectangle();
+            if (Intersector.overlaps(rectangle, playerBoundingBox)) {
+                if (direction.equals("up")) {
+                    playerBoundingBox.y -= (speed + 2) * delta;
+                } else if (direction.equals("down")) {
+                    playerBoundingBox.y += speed * delta;
+                } else if (direction.equals("left")) {
+                    playerBoundingBox.x += speed * delta;
+                } else if (direction.equals("right")) {
+                    playerBoundingBox.x -= speed * delta;
+                }
+                return;
+            }
+        }
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             playerBoundingBox.y += speed * delta;
-            currentAnimation = spriteProcessor.getAnimations().get("playerWalkingUp");
             direction = "up";
-        }else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            currentAnimation = spriteProcessor.getAnimations().get("playerWalkingUp");
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             playerBoundingBox.y -= speed * delta;
-            currentAnimation = spriteProcessor.getAnimations().get("playerWalkingDown");
             direction = "down";
+            currentAnimation = spriteProcessor.getAnimations().get("playerWalkingDown");
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             playerBoundingBox.x -= speed * delta;
-            currentAnimation = spriteProcessor.getAnimations().get("playerWalkingLeft");
             direction = "left";
-        }else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            currentAnimation = spriteProcessor.getAnimations().get("playerWalkingLeft");
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             playerBoundingBox.x += speed * delta;
-            currentAnimation = spriteProcessor.getAnimations().get("playerWalkingRight");
             direction = "right";
-        }else{
-            if(direction.equals("up")){
+            currentAnimation = spriteProcessor.getAnimations().get("playerWalkingRight");
+        } else {
+            if (direction.equals("up")) {
                 currentAnimation = spriteProcessor.getAnimations().get("playerIdleUp");
-            } else if(direction.equals("down")){
+            } else if (direction.equals("down")) {
                 currentAnimation = spriteProcessor.getAnimations().get("playerIdleDown");
-            } else if(direction.equals("right")){
+            } else if (direction.equals("right")) {
                 currentAnimation = spriteProcessor.getAnimations().get("playerIdleRight");
-            } else if(direction.equals("left")){
+            } else if (direction.equals("left")) {
                 currentAnimation = spriteProcessor.getAnimations().get("playerIdleLeft");
             }
         }
+
+
+
     }
 
     public Rectangle getPlayerBoundingBox() {
