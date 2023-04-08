@@ -25,6 +25,8 @@ public class Player {
 
     private MapObjects mapObjects;
 
+    public Rectangle playerUseBox;
+
 
 
     public Player(SpriteBatch batch, SpriteProcessor spriteProcessor, MapObjects mapObjects) {
