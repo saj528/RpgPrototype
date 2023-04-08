@@ -110,6 +110,8 @@ public class GameScreen implements Screen {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(0,0,1,0.1f);
         shapeRenderer.rect(player.getPlayerBoundingBox().x, player.getPlayerBoundingBox().y, player.getPlayerBoundingBox().width, player.getPlayerBoundingBox().height);
+        shapeRenderer.setColor(0,1,0,0.1f);
+        shapeRenderer.rect(player.getPlayerUseBox().x,player.getPlayerUseBox().y,player.getPlayerUseBox().width,player.getPlayerUseBox().height);
         shapeRenderer.end();
 
         batch.begin();
