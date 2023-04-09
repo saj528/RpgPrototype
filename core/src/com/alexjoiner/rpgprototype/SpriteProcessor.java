@@ -21,13 +21,19 @@ public class SpriteProcessor {
 
     private HashMap<String,Animation<TextureRegion>> animations;
 
+    private HashMap<String,TextureRegion> npcTextureRegions;
 
 
     public SpriteProcessor() {
 
         animations = new HashMap<>();
+        npcTextureRegions = new HashMap<>();
+
 
         textureAtlas = new TextureAtlas("player_atlas.atlas");
+
+        npcTextureRegions.put("oldMan",textureAtlas.findRegion("walking_down4"));
+
         playerWalkingDownTexReg = createSpriteTextureRegion("walking_down", 1, 4);
         playerWalkingUpTexReg = createSpriteTextureRegion("walking_up", 1, 4);
         playerWalkingRightTexReg = createSpriteTextureRegion("walking_right", 1, 4);
@@ -78,4 +84,9 @@ public class SpriteProcessor {
     public HashMap<String, Animation<TextureRegion>> getAnimations() {
         return animations;
     }
+
+    public HashMap<String, TextureRegion> getNpcTextureRegions() {
+        return npcTextureRegions;
+    }
+
 }

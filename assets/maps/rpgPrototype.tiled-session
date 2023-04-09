@@ -3,10 +3,22 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "map01.tmx",
     "expandedProjectPaths": [
+        "."
     ],
     "fileStates": {
+        "map01.tmx": {
+            "scale": 3.525390625,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 172.6049861495845,
+                "y": 358.4
+            }
+        },
+        "map01.tmx#spritesheetTileSet": {
+            "scaleInDock": 1
+        },
         "map02.tmx": {
             "scale": 3,
             "selectedLayer": 0,
@@ -39,9 +51,11 @@
     "map.lastUsedFormat": "tmx",
     "map.width": 16,
     "openFiles": [
+        "map01.tmx"
     ],
     "project": "rpgPrototype.tiled-project",
     "recentFiles": [
+        "map01.tmx",
         "map03.tmx",
         "map02.tmx",
         "spritesheet.tsx"

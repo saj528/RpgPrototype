@@ -1,5 +1,6 @@
 package com.alexjoiner.rpgprototype;
 
+import com.alexjoiner.rpgprototype.components.CharacterEntity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 
 public class GameScreen implements Screen {
 
+
     private OrthographicCamera camera;
     private Viewport viewport;
 
@@ -38,7 +40,6 @@ public class GameScreen implements Screen {
     ShapeRenderer shapeRenderer;
 
     Player player;
-
 
     private final float playerSize = 16;
     private final float WORLD_WIDTH = playerSize * 15;
@@ -51,7 +52,7 @@ public class GameScreen implements Screen {
 
     private TiledMap map;
 
-
+    private CharacterEntity oldMan;
 
 
     public GameScreen() {
@@ -74,14 +75,19 @@ public class GameScreen implements Screen {
 
         mapObjects = map.getLayers().get("collision").getObjects();
 
-        player = new Player(batch,spriteProcessor,mapObjects);
+        player = new Player(batch, spriteProcessor, mapObjects);
 
 
+        float oldmanX = (float) mapObjects.get("oldMan").getProperties().get("x");
+        float oldmanY = (float) mapObjects.get("oldMan").getProperties().get("y");
+        System.out.println(oldmanX);
+        System.out.println(oldmanY);
+
+
+        oldMan = new CharacterEntity(spriteProcessor.getNpcTextureRegions().get("oldMan"),"oldMan", new Rectangle((float) mapObjects.get("oldMan").getProperties().get("x"),(float) mapObjects.get("oldMan").getProperties().get("y"),16,16));
 
 
     }
-
-
 
     @Override
     public void show() {
@@ -94,6 +100,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
+
 
         if (Math.abs(player.getPlayerBoundingBox().x - camera.position.x) > 2 || Math.abs(player.getPlayerBoundingBox().y - camera.position.y) > 2) {
             Vector3 targetPosition = new Vector3(player.getPlayerBoundingBox().x, player.getPlayerBoundingBox().y, 0);
@@ -108,20 +115,24 @@ public class GameScreen implements Screen {
         player.detectInput(delta);
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(0,0,1,0.1f);
+        shapeRenderer.setColor(0, 0, 1, 0.1f);
         shapeRenderer.rect(player.getPlayerBoundingBox().x, player.getPlayerBoundingBox().y, player.getPlayerBoundingBox().width, player.getPlayerBoundingBox().height);
-        shapeRenderer.setColor(0,1,0,0.1f);
-        shapeRenderer.rect(player.getPlayerUseBox().x,player.getPlayerUseBox().y,player.getPlayerUseBox().width,player.getPlayerUseBox().height);
+
+        shapeRenderer.setColor(0, 1, 0, 0.1f);
+        shapeRenderer.rect(player.getPlayerUseBox().x, player.getPlayerUseBox().y, player.getPlayerUseBox().width, player.getPlayerUseBox().height);
+
+        shapeRenderer.setColor(0, 0.5f, 0.5f, 0.1f);
+        shapeRenderer.rect(oldMan.getBoundingBox().x, oldMan.getBoundingBox().y, oldMan.getBoundingBox().width, oldMan.getBoundingBox().height);
         shapeRenderer.end();
 
         batch.begin();
+
+        batch.draw(oldMan.getCharacterTexReg(),oldMan.getBoundingBox().getX(),oldMan.getBoundingBox().getY());
         player.renderAndUpdate(delta);
 
         batch.end();
 
     }
-
-
 
 
     @Override
