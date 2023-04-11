@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -31,7 +32,9 @@ public class GameScreen implements Screen {
 
 
     private OrthographicCamera camera;
+    private OrthographicCamera hudCamera;
     private Viewport viewport;
+    private Viewport hudViewport;
 
     private SpriteBatch batch;
 
@@ -54,16 +57,24 @@ public class GameScreen implements Screen {
 
     private CharacterEntity oldMan;
 
+    private TextureRegion textBoxTexReg;
+
 
     public GameScreen() {
 
         shapeRenderer = new ShapeRenderer();
 
         camera = new OrthographicCamera();
+        hudCamera = new OrthographicCamera();
 
         camera.position.set(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f, 0);
+        hudCamera.position.set(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f, 0);
 
         viewport = new ExtendViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
+        hudViewport = new ScreenViewport(hudCamera);
+
+
+        hudCamera.setToOrtho(false, 1920,1080);
 
         spriteProcessor = new SpriteProcessor();
 
@@ -77,15 +88,11 @@ public class GameScreen implements Screen {
 
         player = new Player(batch, spriteProcessor, mapObjects);
 
-
         float oldmanX = (float) mapObjects.get("oldMan").getProperties().get("x");
         float oldmanY = (float) mapObjects.get("oldMan").getProperties().get("y");
-        System.out.println(oldmanX);
-        System.out.println(oldmanY);
-
 
         oldMan = new CharacterEntity(spriteProcessor.getNpcTextureRegions().get("oldMan"),"oldMan", new Rectangle((float) mapObjects.get("oldMan").getProperties().get("x"),(float) mapObjects.get("oldMan").getProperties().get("y"),16,16));
-
+        textBoxTexReg = spriteProcessor.getHudTextureRegions().get("textBox");
 
     }
 
@@ -112,6 +119,7 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
         shapeRenderer.setProjectionMatrix(camera.combined);
 
+
         player.detectInput(delta);
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -128,8 +136,14 @@ public class GameScreen implements Screen {
         batch.begin();
 
         batch.draw(oldMan.getCharacterTexReg(),oldMan.getBoundingBox().getX(),oldMan.getBoundingBox().getY());
+
         player.renderAndUpdate(delta);
 
+        batch.end();
+
+        batch.setProjectionMatrix(hudCamera.combined);
+        batch.begin();
+        batch.draw(textBoxTexReg,textBoxTexReg.getRegionWidth() / 2,0,textBoxTexReg.getRegionWidth() * 7,textBoxTexReg.getRegionHeight() * 7);
         batch.end();
 
     }
