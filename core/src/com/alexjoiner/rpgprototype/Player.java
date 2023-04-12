@@ -31,6 +31,7 @@ public class Player {
     private final float PLAYER_USE_BOX_WIDTH = 2;
     private final float PLAYER_USE_BOX_LENGTH = 15;
 
+    private boolean isPlayerUsing = false;
 
     public Player(SpriteBatch batch, SpriteProcessor spriteProcessor, MapObjects mapObjects) {
 
@@ -56,6 +57,11 @@ public class Player {
     }
 
     public void detectInput(float delta) {
+
+
+        if(Gdx.input.isKeyPressed(Input.Keys.E)){
+            isPlayerUsing = true;
+        }
 
         float speed = 48f;
         for (RectangleMapObject rectangleObject : mapObjects.getByType(RectangleMapObject.class)) {
@@ -114,5 +120,13 @@ public class Player {
 
     public Rectangle getPlayerUseBox() {
         return playerUseBox;
+    }
+
+    public boolean isPlayerUsing() {
+        return isPlayerUsing;
+    }
+
+    public void setPlayerUsing(boolean playerUsing) {
+        isPlayerUsing = playerUsing;
     }
 }

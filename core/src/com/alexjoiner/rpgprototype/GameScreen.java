@@ -143,7 +143,12 @@ public class GameScreen implements Screen {
 
         batch.setProjectionMatrix(hudCamera.combined);
         batch.begin();
-        batch.draw(textBoxTexReg,textBoxTexReg.getRegionWidth() / 2,0,textBoxTexReg.getRegionWidth() * 7,textBoxTexReg.getRegionHeight() * 7);
+        if(player.isPlayerUsing() && player.getPlayerUseBox().overlaps(oldMan.getBoundingBox())){
+            batch.draw(textBoxTexReg,textBoxTexReg.getRegionWidth() / 2,0,textBoxTexReg.getRegionWidth() * 7,textBoxTexReg.getRegionHeight() * 7);
+        }else{
+            player.setPlayerUsing(false);
+        }
+
         batch.end();
 
     }
