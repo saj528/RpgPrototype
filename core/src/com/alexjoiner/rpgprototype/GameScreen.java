@@ -5,10 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObjects;
@@ -59,6 +57,8 @@ public class GameScreen implements Screen {
 
     private TextureRegion textBoxTexReg;
 
+    BitmapFont font = new BitmapFont();
+
 
     public GameScreen() {
 
@@ -93,7 +93,8 @@ public class GameScreen implements Screen {
 
         oldMan = new CharacterEntity(spriteProcessor.getNpcTextureRegions().get("oldMan"),"oldMan", new Rectangle((float) mapObjects.get("oldMan").getProperties().get("x"),(float) mapObjects.get("oldMan").getProperties().get("y"),16,16));
         textBoxTexReg = spriteProcessor.getHudTextureRegions().get("textBox");
-
+        font.getData().setScale(8);
+        font.setColor(Color.BLACK);
     }
 
     @Override
@@ -139,17 +140,37 @@ public class GameScreen implements Screen {
 
         player.renderAndUpdate(delta);
 
+
         batch.end();
 
         batch.setProjectionMatrix(hudCamera.combined);
         batch.begin();
         if(player.isPlayerUsing() && player.getPlayerUseBox().overlaps(oldMan.getBoundingBox())){
             batch.draw(textBoxTexReg,textBoxTexReg.getRegionWidth() / 2,0,textBoxTexReg.getRegionWidth() * 7,textBoxTexReg.getRegionHeight() * 7);
+            font.draw(batch, "Hello, world!",Gdx.graphics.getWidth() / 4 , Gdx.graphics.getHeight() / 3);
+
         }else{
             player.setPlayerUsing(false);
         }
 
         batch.end();
+
+    }
+
+    private void prepareHUD() {
+        //Create a BitmapFont from our font file
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("EdgeOfTheGalaxyRegular-OVEa6.otf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+        fontParameter.size = 72;
+        fontParameter.borderWidth = 3.6f;
+        fontParameter.color = new Color(1, 1, 1, 0.3f);
+        fontParameter.borderColor = new Color(0, 0, 0, 0.3f);
+
+        font = fontGenerator.generateFont(fontParameter);
+
+        //scale the font to fit world
+        font.getData().setScale(0.08f);
 
     }
 
